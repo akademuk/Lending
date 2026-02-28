@@ -157,7 +157,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   font-weight:700;
   letter-spacing:0.15em;
   text-transform:uppercase;
-  color:#4a9e98;
+  color:#256c66;
   margin-bottom:var(--sp-sm);
 }
 .section-label--light{color:var(--c-mint)}
@@ -466,11 +466,11 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   align-items:center;
   gap:8px;
   padding:10px 14px;
-  background:rgba(20,10,5,0.55);
+  background:rgba(20,10,5,0.85);
   border:1px solid rgba(255,255,255,0.12);
   border-radius:var(--r-sm);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
   color:var(--c-white);
   z-index:5;
   transition:transform var(--tr-base),background var(--tr-base),border-color var(--tr-base);
@@ -508,7 +508,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
 }
 .hero__adv-text span{
   font-size:var(--f-xs);
-  color:rgba(255,255,255,0.9);
+  color:#fff;
 }
 
 /* ── Mobile: 2×2 grid under image ── */
@@ -1183,7 +1183,7 @@ input[type="radio"]:checked + .contact-form__pill{
 .footer__list{display:flex;flex-direction:column;gap:10px}
 .footer__link{
   font-size:var(--f-sm);
-  color:rgba(255,255,255,0.85);
+  color:#fff;
   transition:color var(--tr-fast);
 }
 .footer__link:hover{color:var(--c-mint)}
@@ -1192,24 +1192,24 @@ input[type="radio"]:checked + .contact-form__pill{
   align-items:center;
   gap:8px;
   font-size:var(--f-sm);
-  color:rgba(255,255,255,0.85);
+  color:#fff;
 }
 .footer__info-item a{
-  color:rgba(255,255,255,0.85);
+  color:#fff;
   transition:color var(--tr-fast);
 }
 .footer__info-item a:hover{color:var(--c-mint)}
 .footer__hours{
   margin-top:var(--sp-md);
   font-size:var(--f-xs);
-  color:rgba(255,255,255,0.65);
+  color:#d1ccc7;
   line-height:1.7;
 }
 .footer__bottom{
   padding:var(--sp-md) 0;
   text-align:center;
   font-size:var(--f-xs);
-  color:rgba(255,255,255,0.8);
+  color:#fff;
 }
 
 @media(min-width:640px){
