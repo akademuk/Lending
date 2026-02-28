@@ -157,7 +157,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   font-weight:700;
   letter-spacing:0.15em;
   text-transform:uppercase;
-  color:var(--c-mint-dark);
+  color:#4a9e98;
   margin-bottom:var(--sp-sm);
 }
 .section-label--light{color:var(--c-mint)}
@@ -185,7 +185,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   font-size:var(--f-sm);
   padding:14px 28px;
   border-radius:var(--r-full);
-  transition:var(--tr-base);
+  transition:transform var(--tr-base),background var(--tr-base),box-shadow var(--tr-base),color var(--tr-base),border-color var(--tr-base);
   cursor:pointer;
   text-align:center;
   justify-content:center;
@@ -237,7 +237,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid rgba(255,255,255,0.06);
-  transition:var(--tr-base);
+  transition:background var(--tr-base),box-shadow var(--tr-base);
 }
 .header--scrolled{
   background:rgba(20,10,5,0.92);
@@ -267,7 +267,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   color:rgba(255,255,255,0.7);
   font-size:var(--f-sm);
   font-weight:500;
-  transition:var(--tr-fast);
+  transition:color var(--tr-fast);
   position:relative;
 }
 .header__nav-link::after{
@@ -307,7 +307,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
 .header__burger span{
   display:block;width:22px;height:2px;
   background:var(--c-white);border-radius:2px;
-  transition:var(--tr-base);
+  transition:transform var(--tr-base),opacity var(--tr-base);
 }
 .header__burger--active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .header__burger--active span:nth-child(2){opacity:0}
@@ -473,16 +473,16 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   -webkit-backdrop-filter:blur(20px);
   color:var(--c-white);
   z-index:5;
-  transition:var(--tr-base);
+  transition:transform var(--tr-base),background var(--tr-base),border-color var(--tr-base);
   box-shadow:0 8px 32px rgba(0,0,0,0.25);
   opacity:0;
+  will-change:transform,opacity;
   animation:advFloat 0.7s cubic-bezier(0.4,0,0.2,1) forwards;
 }
 .hero__adv:hover{
   background:rgba(20,10,5,0.75);
   border-color:var(--c-mint);
   transform:translateY(-4px) scale(1.03);
-  box-shadow:0 12px 40px rgba(0,0,0,0.35),0 0 20px rgba(134,208,203,0.15);
 }
 .hero__adv-icon{
   width:34px;
@@ -508,7 +508,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
 }
 .hero__adv-text span{
   font-size:var(--f-xs);
-  color:rgba(255,255,255,0.75);
+  color:rgba(255,255,255,0.9);
 }
 
 /* ── Mobile: 2×2 grid under image ── */
@@ -1183,8 +1183,8 @@ input[type="radio"]:checked + .contact-form__pill{
 .footer__list{display:flex;flex-direction:column;gap:10px}
 .footer__link{
   font-size:var(--f-sm);
-  color:rgba(255,255,255,0.7);
-  transition:var(--tr-fast);
+  color:rgba(255,255,255,0.85);
+  transition:color var(--tr-fast);
 }
 .footer__link:hover{color:var(--c-mint)}
 .footer__info-item{
@@ -1192,11 +1192,11 @@ input[type="radio"]:checked + .contact-form__pill{
   align-items:center;
   gap:8px;
   font-size:var(--f-sm);
-  color:rgba(255,255,255,0.7);
+  color:rgba(255,255,255,0.85);
 }
 .footer__info-item a{
-  color:rgba(255,255,255,0.7);
-  transition:var(--tr-fast);
+  color:rgba(255,255,255,0.85);
+  transition:color var(--tr-fast);
 }
 .footer__info-item a:hover{color:var(--c-mint)}
 .footer__hours{
@@ -1209,7 +1209,7 @@ input[type="radio"]:checked + .contact-form__pill{
   padding:var(--sp-md) 0;
   text-align:center;
   font-size:var(--f-xs);
-  color:rgba(255,255,255,0.6);
+  color:rgba(255,255,255,0.8);
 }
 
 @media(min-width:640px){
@@ -1326,4 +1326,18 @@ a:focus-visible,button:focus-visible,.button:focus-visible,.contact-form__input:
 ::selection{
   background:var(--c-mint);
   color:var(--c-dark);
+}
+
+/* ── IMAGE FALLBACK (hide broken icon, show container gradient) ── */
+.pkg-card__img img,
+.prod-card__img img,
+.hero__hero-img,
+.benefit-card img{
+  color:transparent;             /* hide alt text in broken state */
+}
+.pkg-card__img img:-moz-broken,
+.prod-card__img img:-moz-broken{opacity:0}
+@supports selector(:broken) {
+  .pkg-card__img img:broken,
+  .prod-card__img img:broken{opacity:0}
 }

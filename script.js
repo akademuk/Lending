@@ -217,6 +217,11 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+
+      // Honeypot anti-spam check
+      const honeypot = form.querySelector('input[name="website"]');
+      if (honeypot && honeypot.value) return;
+
       let valid = true;
 
       clearErrors();
@@ -244,11 +249,19 @@
           name: nameInput.value.trim(),
           phone: phoneInput.value.trim(),
           company: form.querySelector('#userCompany')?.value.trim() || '',
-          volume: volume ? volume.value : ''
+          volume: volume ? volume.value : '',
+          ts: new Date().toISOString()
         };
 
         // Send to Telegram
-        await sendToTelegram(data);
+        const sent = await sendToTelegram(data);
+
+        // localStorage backup for failed or all leads
+        try {
+          const leads = JSON.parse(localStorage.getItem('bm_leads') || '[]');
+          leads.push({ ...data, sent });
+          localStorage.setItem('bm_leads', JSON.stringify(leads));
+        } catch (_) { /* quota exceeded — silently skip */ }
 
         // Email fallback
         sendEmailFallback(data);
@@ -304,6 +317,10 @@
     initPhoneMask();
     initForm();
     initLazyMap();
+
+    // Dynamic copyright year
+    const yearEl = document.getElementById('currentYear');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
   });
 
 })();

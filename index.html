@@ -37,11 +37,11 @@
     a{color:inherit;text-decoration:none}
     ul{list-style:none}
     .container{width:100%;max-width:1240px;margin:0 auto;padding:0 clamp(1rem,3vw,2rem)}
-    .button{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:var(--f-sm);padding:14px 28px;border-radius:var(--r-full);transition:var(--tr-base);cursor:pointer;text-align:center;justify-content:center;white-space:nowrap;position:relative;overflow:hidden}
+    .button{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:var(--f-sm);padding:14px 28px;border-radius:var(--r-full);transition:transform var(--tr-base),background var(--tr-base),box-shadow var(--tr-base),color var(--tr-base),border-color var(--tr-base);cursor:pointer;text-align:center;justify-content:center;white-space:nowrap;position:relative;overflow:hidden}
     .button--glow{background:var(--c-mint);color:var(--c-dark);box-shadow:0 4px 20px rgba(134,208,203,.35)}
     .button--ghost{background:transparent;color:var(--c-white);border:1.5px solid rgba(255,255,255,.25)}
     .button--lg{padding:18px 36px;font-size:var(--f-base)}
-    .header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(20,10,5,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);transition:var(--tr-base);height:72px}
+    .header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(20,10,5,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);transition:background var(--tr-base),box-shadow var(--tr-base);height:72px}
     .header__container{display:flex;align-items:center;justify-content:space-between;height:72px;gap:var(--sp-md)}
     .header__logo{font-size:var(--f-md);font-weight:800;color:var(--c-white);letter-spacing:.08em;display:flex;align-items:center;gap:6px;flex-shrink:0}
     .header__nav{display:none}
@@ -515,6 +515,10 @@
               <div class="contact-form__group">
                 <input type="text" id="userCompany" name="company" class="contact-form__input" placeholder="Назва компанії" autocomplete="organization" aria-label="Назва компанії">
               </div>
+              <!-- Honeypot anti-spam -->
+              <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true">
+                <input type="text" name="website" tabindex="-1" autocomplete="off">
+              </div>
               <button type="submit" class="contact-form__submit button button--glow">
                 Надіслати заявку
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8H14M10 4L14 8L10 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -562,7 +566,7 @@
         </div>
       </div>
       <div class="footer__bottom">
-        <p>&copy; 2026 BREWMIST. Всі права захищені. <a href="privacy.html" class="footer__link footer__link--inline">Політика конфіденційності</a></p>
+        <p>&copy; <span id="currentYear">2026</span> BREWMIST. Всі права захищені. <a href="privacy.html" class="footer__link footer__link--inline">Політика конфіденційності</a></p>
       </div>
     </div>
   </footer>
