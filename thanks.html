@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#140a05">
+  <title>Дякуємо за заявку — Brewmist</title>
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="preload" href="fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    /* ── Fonts (subset) ── */
+    @font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/manrope-cyrillic-ext.woff2) format('woff2');unicode-range:U+0460-052F,U+1C80-1C8A,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F}
+    @font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/manrope-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+    @font-face{font-family:'Manrope';font-style:normal;font-weight:400 800;font-display:swap;src:url(fonts/manrope-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+    :root{
+      --c-dark:#1D0C03;
+      --c-cream:#FBF6F0;
+      --c-mint:#86D0CB;
+      --c-mint-dark:#6bb8b3;
+      --c-almond:#CD9D81;
+      --c-latte:#E4C9B0;
+      --c-muted:#7a6b62;
+      --surface-dark:#140a05;
+    }
+
+    body{
+      font-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:var(--surface-dark);
+      color:var(--c-cream);
+      min-height:100dvh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:2rem;
+      text-align:center;
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* ── Grain (same as main page) ── */
+    body::before{
+      content:'';
+      position:fixed;
+      inset:0;
+      z-index:0;
+      opacity:.03;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat:repeat;
+      background-size:128px 128px;
+    }
+
+    /* ── Ambient glow ── */
+    .glow{
+      position:absolute;
+      border-radius:50%;
+      filter:blur(120px);
+      opacity:.12;
+      pointer-events:none;
+      z-index:0;
+    }
+    .glow--mint{
+      width:400px;height:400px;
+      background:var(--c-mint);
+      top:-80px;right:-60px;
+    }
+    .glow--almond{
+      width:350px;height:350px;
+      background:var(--c-almond);
+      bottom:-100px;left:-80px;
+      opacity:.08;
+    }
+
+    /* ── Content ── */
+    .thanks{
+      position:relative;
+      z-index:1;
+      max-width:560px;
+      animation:fadeUp .8s ease-out both;
+    }
+
+    @keyframes fadeUp{
+      from{opacity:0;transform:translateY(30px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    .thanks__icon{
+      width:88px;height:88px;
+      margin:0 auto 2rem;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--c-mint), var(--c-mint-dark));
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 0 60px rgba(134,208,203,.25);
+      animation:pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse{
+      0%,100%{box-shadow:0 0 40px rgba(134,208,203,.2)}
+      50%{box-shadow:0 0 70px rgba(134,208,203,.35)}
+    }
+
+    .thanks__icon svg{
+      width:40px;height:40px;
+      color:var(--surface-dark);
+    }
+
+    .thanks__title{
+      font-size:clamp(1.8rem,1.2rem + 2.5vw,2.75rem);
+      font-weight:800;
+      line-height:1.2;
+      margin-bottom:1rem;
+      letter-spacing:-.01em;
+    }
+
+    .thanks__title span{
+      background:linear-gradient(135deg, var(--c-mint), var(--c-latte));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+
+    .thanks__text{
+      font-size:clamp(1rem,0.9rem + 0.5vw,1.2rem);
+      color:var(--c-muted);
+      line-height:1.7;
+      margin-bottom:2.5rem;
+    }
+
+    .thanks__text strong{
+      color:var(--c-cream);
+      font-weight:600;
+    }
+
+    .thanks__actions{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:1rem;
+    }
+
+    .thanks__btn{
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      padding:.875rem 2rem;
+      border-radius:60px;
+      font-family:inherit;
+      font-size:1rem;
+      font-weight:700;
+      text-decoration:none;
+      transition:all .3s ease;
+      cursor:pointer;
+      border:none;
+    }
+
+    .thanks__btn--primary{
+      background:linear-gradient(135deg, var(--c-mint), var(--c-mint-dark));
+      color:var(--surface-dark);
+      box-shadow:0 4px 20px rgba(134,208,203,.3);
+    }
+    .thanks__btn--primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 6px 30px rgba(134,208,203,.4);
+    }
+
+    .thanks__btn--ghost{
+      background:transparent;
+      color:var(--c-muted);
+      border:1px solid rgba(255,255,255,.1);
+    }
+    .thanks__btn--ghost:hover{
+      color:var(--c-cream);
+      border-color:rgba(255,255,255,.2);
+    }
+
+    .thanks__btn svg{
+      width:16px;height:16px;
+      flex-shrink:0;
+    }
+
+    .thanks__timer{
+      margin-top:1.5rem;
+      font-size:.85rem;
+      color:var(--c-muted);
+      opacity:.7;
+    }
+
+    .thanks__timer span{
+      color:var(--c-mint);
+      font-weight:700;
+      font-variant-numeric:tabular-nums;
+    }
+
+    /* ── Footer ── */
+    .thanks-footer{
+      position:absolute;
+      bottom:2rem;
+      left:0;right:0;
+      text-align:center;
+      z-index:1;
+      font-size:.8rem;
+      color:var(--c-muted);
+      opacity:.5;
+    }
+    .thanks-footer a{
+      color:var(--c-muted);
+      text-decoration:none;
+    }
+    .thanks-footer a:hover{color:var(--c-cream)}
+
+    /* ── Reduced motion ── */
+    @media(prefers-reduced-motion:reduce){
+      .thanks,
+      .thanks__icon{animation:none}
+      .thanks__btn{transition:none}
+    }
+
+    /* ── Focus ── */
+    :focus-visible{
+      outline:2px solid var(--c-mint);
+      outline-offset:3px;
+    }
+  </style>
+
+  <!-- Google Ads Conversion (вставте свій код тут) -->
+  <!-- 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-XXXXXXXXXX');
+    gtag('event', 'conversion', {'send_to': 'AW-XXXXXXXXXX/XXXXXXXXXXXX'});
+  </script>
+  -->
+</head>
+<body>
+
+  <!-- Ambient glows -->
+  <div class="glow glow--mint" aria-hidden="true"></div>
+  <div class="glow glow--almond" aria-hidden="true"></div>
+
+  <main class="thanks" role="main">
+    <!-- Checkmark icon -->
+    <div class="thanks__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <h1 class="thanks__title">
+      <span>Дякуємо</span> за вашу заявку!
+    </h1>
+
+    <p class="thanks__text">
+      Наш менеджер зв'яжеться з вами <strong>протягом 30 хвилин</strong> у робочий час.<br>
+      Ми підберемо ідеальну кавомашину для вашого бізнесу.
+    </p>
+
+    <div class="thanks__actions">
+      <a href="index.html" class="thanks__btn thanks__btn--primary">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M14 8H2M6 4L2 8L6 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Повернутися на сайт
+      </a>
+      <a href="tel:+380XXXXXXXX" class="thanks__btn thanks__btn--ghost">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M2.5 2.5H5.5L6.75 5.75L5 7C5.8 8.8 7.2 10.2 9 11L10.25 9.25L13.5 10.5V13.5C13.5 14 13 14.5 12.5 14.5C6.5 14.5 1.5 9.5 1 3.5C1 3 1.5 2.5 2 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        Зателефонувати зараз
+      </a>
+    </div>
+
+    <p class="thanks__timer">Автоповернення через <span id="countdown">10</span> сек.</p>
+  </main>
+
+  <footer class="thanks-footer">
+    <a href="index.html">☕ BREWMIST</a> — професійна кава для бізнесу
+  </footer>
+
+  <script>
+    // Auto-redirect countdown
+    (function() {
+      'use strict';
+      var count = 10;
+      var el = document.getElementById('countdown');
+      var timer = setInterval(function() {
+        count--;
+        if (el) el.textContent = count;
+        if (count <= 0) {
+          clearInterval(timer);
+          window.location.href = 'index.html';
+        }
+      }, 1000);
+    })();
+  </script>
+
+</body>
+</html>
