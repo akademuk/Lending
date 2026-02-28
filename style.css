@@ -157,7 +157,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   font-weight:700;
   letter-spacing:0.15em;
   text-transform:uppercase;
-  color:var(--c-mint);
+  color:var(--c-mint-dark);
   margin-bottom:var(--sp-sm);
 }
 .section-label--light{color:var(--c-mint)}
@@ -508,7 +508,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
 }
 .hero__adv-text span{
   font-size:var(--f-xs);
-  color:rgba(255,255,255,0.5);
+  color:rgba(255,255,255,0.75);
 }
 
 /* ── Mobile: 2×2 grid under image ── */
@@ -1153,7 +1153,7 @@ input[type="radio"]:checked + .contact-form__pill{
 }
 .footer__tagline{
   font-size:var(--f-sm);
-  color:rgba(255,255,255,0.4);
+  color:rgba(255,255,255,0.7);
   margin-bottom:var(--sp-md);
 }
 .footer__socials{display:flex;gap:var(--sp-sm)}
@@ -1164,7 +1164,7 @@ input[type="radio"]:checked + .contact-form__pill{
   display:flex;
   align-items:center;
   justify-content:center;
-  color:rgba(255,255,255,0.5);
+  color:rgba(255,255,255,0.75);
   transition:var(--tr-fast);
 }
 .footer__social:hover{
@@ -1183,7 +1183,7 @@ input[type="radio"]:checked + .contact-form__pill{
 .footer__list{display:flex;flex-direction:column;gap:10px}
 .footer__link{
   font-size:var(--f-sm);
-  color:rgba(255,255,255,0.45);
+  color:rgba(255,255,255,0.7);
   transition:var(--tr-fast);
 }
 .footer__link:hover{color:var(--c-mint)}
@@ -1192,24 +1192,24 @@ input[type="radio"]:checked + .contact-form__pill{
   align-items:center;
   gap:8px;
   font-size:var(--f-sm);
-  color:rgba(255,255,255,0.45);
+  color:rgba(255,255,255,0.7);
 }
 .footer__info-item a{
-  color:rgba(255,255,255,0.45);
+  color:rgba(255,255,255,0.7);
   transition:var(--tr-fast);
 }
 .footer__info-item a:hover{color:var(--c-mint)}
 .footer__hours{
   margin-top:var(--sp-md);
   font-size:var(--f-xs);
-  color:rgba(255,255,255,0.3);
+  color:rgba(255,255,255,0.65);
   line-height:1.7;
 }
 .footer__bottom{
   padding:var(--sp-md) 0;
   text-align:center;
   font-size:var(--f-xs);
-  color:rgba(255,255,255,0.25);
+  color:rgba(255,255,255,0.6);
 }
 
 @media(min-width:640px){

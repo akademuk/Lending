@@ -22,13 +22,47 @@
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="preload" href="fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preload" href="style.css" as="style">
+  <link rel="stylesheet" href="style.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="style.css"></noscript>
   <script src="script.js" defer></script>
   <style>
-    /* Critical inline CSS for LCP — prevent layout shift */
-    body{margin:0;font-family:'Manrope',sans-serif;background:#FBF6F0;overflow-x:hidden}
-    .header{position:fixed;top:0;left:0;right:0;z-index:1000;height:72px}
-    .hero{min-height:100dvh;background:#140a05}
+    /* ── Critical CSS: above-the-fold (header + hero) ── */
+    :root{--c-latte:#E4C9B0;--c-almond:#CD9D81;--c-espresso:#493632;--c-dark:#1D0C03;--c-white:#FFFFFF;--c-sky:#85CFED;--c-mint:#86D0CB;--c-mint-dark:#6bb8b3;--c-cream:#FBF6F0;--c-muted:#7a6b62;--surface-dark:#140a05;--f-family:'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--f-xs:clamp(.7rem,.65rem + .25vw,.8rem);--f-sm:clamp(.8rem,.72rem + .4vw,.9375rem);--f-base:clamp(.9rem,.8rem + .5vw,1.0625rem);--f-md:clamp(1rem,.88rem + .6vw,1.25rem);--f-3xl:clamp(2.5rem,1.5rem + 4.5vw,4.75rem);--sp-sm:1rem;--sp-md:1.5rem;--sp-lg:2.5rem;--sp-xl:4rem;--sp-2xl:6rem;--r-sm:8px;--r-md:16px;--r-lg:24px;--r-full:100px;--tr-fast:.2s cubic-bezier(.4,0,.2,1);--tr-base:.35s cubic-bezier(.4,0,.2,1)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:90px}
+    body{font-family:var(--f-family);font-size:var(--f-base);line-height:1.6;color:var(--c-dark);background:var(--c-cream);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    img,svg{display:block;max-width:100%}
+    picture{display:contents}
+    a{color:inherit;text-decoration:none}
+    ul{list-style:none}
+    .container{width:100%;max-width:1240px;margin:0 auto;padding:0 clamp(1rem,3vw,2rem)}
+    .button{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:var(--f-sm);padding:14px 28px;border-radius:var(--r-full);transition:var(--tr-base);cursor:pointer;text-align:center;justify-content:center;white-space:nowrap;position:relative;overflow:hidden}
+    .button--glow{background:var(--c-mint);color:var(--c-dark);box-shadow:0 4px 20px rgba(134,208,203,.35)}
+    .button--ghost{background:transparent;color:var(--c-white);border:1.5px solid rgba(255,255,255,.25)}
+    .button--lg{padding:18px 36px;font-size:var(--f-base)}
+    .header{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(20,10,5,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);transition:var(--tr-base);height:72px}
+    .header__container{display:flex;align-items:center;justify-content:space-between;height:72px;gap:var(--sp-md)}
+    .header__logo{font-size:var(--f-md);font-weight:800;color:var(--c-white);letter-spacing:.08em;display:flex;align-items:center;gap:6px;flex-shrink:0}
+    .header__nav{display:none}
+    .header__actions{display:flex;align-items:center;gap:var(--sp-md)}
+    .header__phone{display:none}
+    .header__cta{display:none}
+    .header__burger{width:36px;height:36px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;cursor:pointer;position:relative;z-index:1001}
+    .header__burger span{display:block;width:22px;height:2px;background:var(--c-white);border-radius:2px}
+    .hero{position:relative;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;background:var(--surface-dark);overflow-x:clip;overflow-y:visible;padding:120px 0 var(--sp-2xl)}
+    .hero__bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse 60% 50% at 80% 20%,rgba(73,54,50,.35) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 10% 80%,rgba(205,157,129,.25) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 50% 50%,rgba(134,208,203,.08) 0%,transparent 70%)}
+    .hero__container{display:grid;grid-template-columns:1fr;gap:var(--sp-xl);position:relative;z-index:2}
+    .hero__badge{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;background:rgba(134,208,203,.1);border:1px solid rgba(134,208,203,.2);border-radius:var(--r-full);color:var(--c-mint);font-size:var(--f-xs);font-weight:600;letter-spacing:.03em;width:fit-content;margin-bottom:var(--sp-md)}
+    .hero__title{font-size:var(--f-3xl);font-weight:800;line-height:1.05;color:var(--c-white);letter-spacing:-.02em}
+    .hero__title-accent{background:linear-gradient(135deg,var(--c-mint),var(--c-sky));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hero__subtitle{font-size:var(--f-md);color:rgba(255,255,255,.6);max-width:480px;line-height:1.7;margin:var(--sp-md) 0 var(--sp-lg)}
+    .hero__cta-group{display:flex;flex-wrap:wrap;gap:var(--sp-sm)}
+    .hero__visual{position:relative;min-height:280px;max-height:360px;margin:0 auto;width:100%}
+    .hero__hero-img{width:100%;height:100%;max-height:360px;object-fit:cover;border-radius:var(--r-lg);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+    .grain-overlay{position:fixed;inset:0;z-index:900;pointer-events:none;opacity:.06}
+    @media(min-width:960px){.hero__container{grid-template-columns:1fr 1fr;align-items:center}.hero__visual{min-height:440px;max-height:520px}.hero{padding:0}.hero__hero-img{max-height:520px;border-radius:32px}}
+    @media(min-width:1280px){.header__nav{display:block}.header__burger{display:none}.header__phone{display:flex}.header__cta{display:inline-flex}}
   </style>
   <script type="application/ld+json">
   {
@@ -506,7 +540,7 @@
           </div>
         </div>
         <nav class="footer__nav" aria-label="Навігація">
-          <h4 class="footer__heading">Навігація</h4>
+          <h3 class="footer__heading">Навігація</h3>
           <ul class="footer__list">
             <li><a href="#packages" class="footer__link">Моделі кавомашин</a></li>
             <li><a href="#products" class="footer__link">Продукція</a></li>
@@ -515,7 +549,7 @@
           </ul>
         </nav>
         <div class="footer__info">
-          <h4 class="footer__heading">Контакти</h4>
+          <h3 class="footer__heading">Контакти</h3>
           <ul class="footer__list">
             <li class="footer__info-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 2.5H5.5L6.75 5.75L5 7C5.8 8.8 7.2 10.2 9 11L10.25 9.25L13.5 10.5V13.5C13.5 14 13 14.5 12.5 14.5C6.5 14.5 1.5 9.5 1 3.5C1 3 1.5 2.5 2 2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg><a href="tel:+380XXXXXXXX">+38 (0XX) XXX XX XX</a></li>
             <li class="footer__info-item"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 5L8 9L15 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg><a href="mailto:info@brewmist.com.ua">info@brewmist.com.ua</a></li>
