@@ -231,10 +231,22 @@
           localStorage.setItem('bm_leads', JSON.stringify(leads));
         } catch (_) { /* quota exceeded — silently skip */ }
 
-        console.log('📧 Form submitted:', data);
-
-        // Redirect to thank-you page (important for Google Ads conversion tracking)
-        window.location.href = 'thanks.html';
+        if (sent) {
+          // Redirect to thank-you page (Google Ads conversion tracking)
+          window.location.href = 'thanks.html';
+        } else {
+          // Show inline error, allow retry
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Надіслати заявку';
+          let errEl = form.querySelector('.contact-form__error');
+          if (!errEl) {
+            errEl = document.createElement('p');
+            errEl.className = 'contact-form__error';
+            errEl.style.cssText = 'color:#e74c3c;font-size:0.85rem;margin-top:0.5rem;text-align:center';
+            submitBtn.parentElement.appendChild(errEl);
+          }
+          errEl.textContent = 'Не вдалося надіслати. Спробуйте ще раз або зателефонуйте нам.';
+        }
       }
     });
 
