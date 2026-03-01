@@ -15,8 +15,8 @@
      TELEGRAM BOT CONFIG
      Replace with your actual bot token and chat ID
      ───────────────────────────────────────────── */
-  const TG_BOT_TOKEN = 'YOUR_BOT_TOKEN';   // e.g. '123456:ABC-DEF...'
-  const TG_CHAT_ID   = 'YOUR_CHAT_ID';     // e.g. '-1001234567890'
+  const TG_BOT_TOKEN = '8551171117:AAFEx-KT6aJQOtkPB-td-9t4LcoiJqS7IBo';
+  const TG_CHAT_ID   = '2110512187';
 
   /* ── MOBILE NAV ── */
   function initMobileNav() {
@@ -195,16 +195,31 @@
     }
   }
 
-  /* ── SEND TO EMAIL (via mailto fallback) ── */
-  function sendEmailFallback(data) {
-    // This creates a mailto link as a backup. For real email sending,
-    // integrate with a backend service (e.g. EmailJS, Formspree, etc.)
-    const subject = encodeURIComponent('Нова заявка Brewmist');
-    const body = encodeURIComponent(
-      `Ім'я: ${data.name}\nТелефон: ${data.phone}\nКомпанія: ${data.company}\nОбсяг: ${data.volume}`
-    );
-    // Uncomment to auto-open email client:
-    // window.location.href = `mailto:your@email.com?subject=${subject}&body=${body}`;
+  /* ── SEND TO EMAIL (formsubmit.co — free, no backend needed) ── */
+  const EMAIL_TO = 'akademuk24@gmail.com';
+
+  async function sendToEmail(data) {
+    try {
+      const resp = await fetch(`https://formsubmit.co/ajax/${EMAIL_TO}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          _subject: 'Нова заявка Brewmist ☕',
+          "Ім'я": data.name,
+          'Телефон': data.phone,
+          'Компанія': data.company || '—',
+          'Обсяг напоїв/день': data.volume || '—',
+          'Час': new Date().toLocaleString('uk-UA')
+        })
+      });
+      return resp.ok;
+    } catch (err) {
+      console.error('Email send error:', err);
+      return false;
+    }
   }
 
   /* ── FORM VALIDATION & SUBMIT ── */
@@ -263,8 +278,8 @@
           localStorage.setItem('bm_leads', JSON.stringify(leads));
         } catch (_) { /* quota exceeded — silently skip */ }
 
-        // Email fallback
-        sendEmailFallback(data);
+        // Send to Email
+        sendToEmail(data);
 
         console.log('📧 Form submitted:', data);
 
