@@ -87,9 +87,10 @@ function escHtml(string $str): string {
 }
 
 function escTg(string $str): string {
+    // Escape Markdown v1 special characters
     return str_replace(
-        ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'],
-        ['\\_', '\\*', '\\[', '\\]', '\\(', '\\)', '\\~', '\\`', '\\>', '\\#', '\\+', '\\-', '\\=', '\\|', '\\{', '\\}', '\\.', '\\!'],
+        ['_', '*', '`', '['],
+        ['\\_', '\\*', '\\`', '\\['],
         $str
     );
 }
@@ -191,5 +192,15 @@ $results['email'] = mail($EMAIL_TO, $subject, $body, $headers);
 
 /* ── RESPONSE ── */
 $ok = $results['tg'] || $results['email'];
+
+// If native form POST (no JS), redirect to thanks page
+$isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+    || (isset($_SERVER['CONTENT_TYPE']) && str_contains($_SERVER['CONTENT_TYPE'], 'application/json'));
+
+if (!$isAjax) {
+    header('Location: ' . ($ok ? 'thanks.html' : 'index.html?error=1'));
+    exit;
+}
+
 http_response_code($ok ? 200 : 500);
 echo json_encode(['ok' => $ok, 'results' => $results]);
