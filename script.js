@@ -12,11 +12,10 @@
   const form = document.getElementById('contactForm');
 
   /* ─────────────────────────────────────────────
-     TELEGRAM BOT CONFIG
-     Replace with your actual bot token and chat ID
+     BACKEND ENDPOINT
+     send.php handles Telegram + Email
      ───────────────────────────────────────────── */
-  const TG_BOT_TOKEN = '8551171117:AAFEx-KT6aJQOtkPB-td-9t4LcoiJqS7IBo';
-  const TG_CHAT_ID   = '2110512187';
+  const SEND_URL = 'send.php';
 
   /* ── MOBILE NAV ── */
   function initMobileNav() {
@@ -160,64 +159,18 @@
     });
   }
 
-  /* ── SEND TO TELEGRAM ── */
-  async function sendToTelegram(data) {
-    if (TG_BOT_TOKEN === 'YOUR_BOT_TOKEN') {
-      console.warn('⚠️ Telegram bot token not configured. Set TG_BOT_TOKEN and TG_CHAT_ID.');
-      return true; // Return true so form still shows success
-    }
-
-    const text = [
-      '☕ *Нова заявка з Brewmist*',
-      '',
-      `👤 *Ім'я:* ${data.name}`,
-      `📞 *Телефон:* ${data.phone}`,
-      data.company ? `🏢 *Компанія:* ${data.company}` : '',
-      `📊 *Обсяг напоїв/день:* ${data.volume || '—'}`,
-      '',
-      `🕐 _${new Date().toLocaleString('uk-UA')}_`
-    ].filter(Boolean).join('\n');
-
+  /* ── SEND FORM DATA TO BACKEND ── */
+  async function sendForm(data) {
     try {
-      const resp = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+      const resp = await fetch(SEND_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TG_CHAT_ID,
-          text: text,
-          parse_mode: 'Markdown'
-        })
+        body: JSON.stringify(data)
       });
-      return resp.ok;
+      const result = await resp.json();
+      return result.ok;
     } catch (err) {
-      console.error('Telegram send error:', err);
-      return false;
-    }
-  }
-
-  /* ── SEND TO EMAIL (formsubmit.co — free, no backend needed) ── */
-  const EMAIL_TO = 'akademuk24@gmail.com';
-
-  async function sendToEmail(data) {
-    try {
-      const resp = await fetch(`https://formsubmit.co/ajax/${EMAIL_TO}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          _subject: 'Нова заявка Brewmist ☕',
-          "Ім'я": data.name,
-          'Телефон': data.phone,
-          'Компанія': data.company || '—',
-          'Обсяг напоїв/день': data.volume || '—',
-          'Час': new Date().toLocaleString('uk-UA')
-        })
-      });
-      return resp.ok;
-    } catch (err) {
-      console.error('Email send error:', err);
+      console.error('Send error:', err);
       return false;
     }
   }
@@ -268,18 +221,15 @@
           ts: new Date().toISOString()
         };
 
-        // Send to Telegram
-        const sent = await sendToTelegram(data);
+        // Send to backend (Telegram + Email)
+        const sent = await sendForm(data);
 
-        // localStorage backup for failed or all leads
+        // localStorage backup
         try {
           const leads = JSON.parse(localStorage.getItem('bm_leads') || '[]');
           leads.push({ ...data, sent });
           localStorage.setItem('bm_leads', JSON.stringify(leads));
         } catch (_) { /* quota exceeded — silently skip */ }
-
-        // Send to Email
-        sendToEmail(data);
 
         console.log('📧 Form submitted:', data);
 
