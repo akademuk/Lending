@@ -167,6 +167,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
+      if (!resp.ok) return false;
+      const ct = resp.headers.get('content-type') || '';
+      if (!ct.includes('application/json')) return false;
       const result = await resp.json();
       return result.ok;
     } catch (err) {
