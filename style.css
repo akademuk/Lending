@@ -664,7 +664,10 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   background:#fff;
 }
 .pkg-card__badge-tag{
-  position:relative;z-index:2;
+  position:absolute;
+  top:12px;
+  right:12px;
+  z-index:2;
   padding:6px 16px;
   background:rgba(29,12,3,0.6);
   backdrop-filter:blur(8px);
