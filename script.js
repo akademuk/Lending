@@ -92,19 +92,20 @@
   function smoothScrollTo(targetEl, duration) {
     if (!targetEl) return;
     duration = duration || 900;
-    const start = window.scrollY;
-    const end = targetEl.getBoundingClientRect().top + start - HEADER_H;
-    const diff = end - start;
     let startTime = null;
+    let startY = window.scrollY;
 
     function ease(t) {
       return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
 
     function step(ts) {
-      if (!startTime) startTime = ts;
+      if (!startTime) { startTime = ts; startY = window.scrollY; }
       const progress = Math.min((ts - startTime) / duration, 1);
-      window.scrollTo(0, start + diff * ease(progress));
+      // Recalculate target each frame (layout shifts from content-visibility)
+      const end = targetEl.getBoundingClientRect().top + window.scrollY - HEADER_H;
+      const diff = end - startY;
+      window.scrollTo(0, startY + diff * ease(progress));
       if (progress < 1) requestAnimationFrame(step);
     }
 
