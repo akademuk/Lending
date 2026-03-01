@@ -267,6 +267,41 @@
     }
   }
 
+  /* ── FIXED MOBILE CTA ── */
+  function initMobileCta() {
+    const cta = document.getElementById('mobileCta');
+    const contactSection = document.getElementById('contact');
+    if (!cta || !contactSection || window.innerWidth >= 960) return;
+
+    let visible = false;
+    let ticking = false;
+
+    function update() {
+      const scrollY = window.scrollY;
+      const contactTop = contactSection.getBoundingClientRect().top + scrollY;
+      const viewportBottom = scrollY + window.innerHeight;
+      const shouldShow = scrollY > 300 && viewportBottom < contactTop + 100;
+
+      if (shouldShow !== visible) {
+        visible = shouldShow;
+        cta.classList.toggle('visible', visible);
+        cta.setAttribute('aria-hidden', String(!visible));
+      }
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+
+    cta.querySelector('a').addEventListener('click', () => {
+      cta.classList.remove('visible');
+      visible = false;
+    });
+
+    update();
+  }
+
   /* ── LAZY LOAD MAP ── */
   function initLazyMap() {
     const mapFrame = document.querySelector('.contact__map-frame');
@@ -297,6 +332,7 @@
     initPhoneMask();
     initForm();
     initLazyMap();
+    initMobileCta();
 
     // Dynamic copyright year
     const yearEl = document.getElementById('currentYear');
