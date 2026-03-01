@@ -642,7 +642,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
 .pkg-card__img{
   aspect-ratio:3/4;
   min-height:280px;
-  background:linear-gradient(135deg,var(--c-latte) 0%,var(--c-sand) 100%);
+  background:#fff;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -654,14 +654,14 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   inset:0;
   width:100%;
   height:100%;
-  object-fit:cover;
+  object-fit:contain;
   z-index:1;
 }
 .pkg-card__img--alt{
-  background:linear-gradient(135deg,var(--c-almond) 0%,var(--c-espresso) 100%);
+  background:#fff;
 }
 .pkg-card__img--third{
-  background:linear-gradient(135deg,var(--c-sand) 0%,var(--c-latte) 100%);
+  background:#fff;
 }
 .pkg-card__badge-tag{
   position:relative;z-index:2;
