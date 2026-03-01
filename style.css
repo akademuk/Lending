@@ -884,6 +884,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   padding:var(--sp-3xl) 0;
   background:var(--surface-dark);
   position:relative;
+  margin-top:-1px;
 }
 
 .benefits__header{
