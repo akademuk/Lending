@@ -598,8 +598,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
 
 /* Package Card */
 .pkg-card{
-  position:sticky;
-  top:80px;
+  position:relative;
   background:var(--c-white);
   border-radius:var(--r-xl);
   overflow:hidden;
@@ -609,8 +608,7 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   display:flex;
   flex-direction:column;
 }
-.pkg-card:nth-child(2){top:100px}
-.pkg-card:nth-child(3){top:120px}
+
 .pkg-card:hover{
   transform:translateY(-4px);
   box-shadow:var(--sh-lg);
@@ -676,6 +674,9 @@ button,input,textarea{font:inherit;border:none;background:none;outline:none}
   font-weight:600;
   border-radius:var(--r-full);
   letter-spacing:0.05em;
+}
+@media(max-width:639px){
+  .pkg-card__badge-tag{right:auto;left:12px}
 }
 
 .pkg-card__body{
@@ -1366,16 +1367,7 @@ a:focus-visible,button:focus-visible,.button:focus-visible,.contact-form__input:
   .footer__bottom{padding-bottom:calc(var(--sp-md) + 72px)}
 }
 
-/* ── DISABLE PKG-CARD REVEAL (sticky conflict) ── */
-.pkg-card.reveal-item{
-  opacity:1;
-  transform:none;
-  transition:none;
-  will-change:auto;
-}
-.pkg-card{
-  transition:transform var(--tr-base),box-shadow var(--tr-base);
-}
+
 
 /* ── REDUCED MOTION ── */
 @media(prefers-reduced-motion:reduce){
