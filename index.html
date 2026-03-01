@@ -44,7 +44,7 @@
       --c-mint: #86D0CB;
       --c-mint-dark: #6bb8b3;
       --c-cream: #FBF6F0;
-      --c-muted: #7a6b62;
+      --c-muted: #6b5c53;
       --surface-dark: #140a05;
       --f-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       --f-xs: clamp(.7rem, .65rem + .25vw, .8rem);
@@ -451,8 +451,8 @@
         </div>
         <div class="hero__visual">
           <picture>
-            <source srcset="img/hero.avif" type="image/avif">
-            <source srcset="img/hero.webp" type="image/webp">
+            <source srcset="img/hero-600.avif 600w, img/hero.avif 1200w" sizes="(max-width:959px) 100vw, 50vw" type="image/avif">
+            <source srcset="img/hero-600.webp 600w, img/hero.webp 1200w" sizes="(max-width:959px) 100vw, 50vw" type="image/webp">
             <img src="img/hero.jpg" alt="Професійна кава Brewmist" class="hero__hero-img" width="600" height="700"
               loading="eager" fetchpriority="high">
           </picture>
@@ -581,8 +581,8 @@
             <div class="pkg-card__ribbon">Хіт продажів</div>
             <div class="pkg-card__img pkg-card__img--alt">
               <picture>
-                <source srcset="img/pkg-f11.avif" type="image/avif">
-                <source srcset="img/pkg-f11.webp" type="image/webp">
+                <source srcset="img/pkg-f11-300.avif 300w, img/pkg-f11.avif 600w" sizes="(max-width:639px) 100vw, 42vw" type="image/avif">
+                <source srcset="img/pkg-f11-300.webp 300w, img/pkg-f11.webp 600w" sizes="(max-width:639px) 100vw, 42vw" type="image/webp">
                 <img src="img/pkg-f11.jpg" alt="Кавомашина Dr.Coffee F11" loading="lazy" decoding="async" width="400"
                   height="300">
               </picture>
@@ -1004,7 +1004,7 @@
 
   <!-- Fixed mobile CTA -->
   <div class="mobile-cta" id="mobileCta" aria-hidden="true">
-    <a href="#contact" class="mobile-cta__btn">
+    <a href="#contact" class="mobile-cta__btn" tabindex="-1">
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
         <path d="M16.5 12.69v2.37a1.58 1.58 0 0 1-1.72 1.58A15.6 15.6 0 0 1 8 14.18a15.37 15.37 0 0 1-4.73-4.73A15.6 15.6 0 0 1 .82 2.72 1.58 1.58 0 0 1 2.38 1h2.37a1.58 1.58 0 0 1 1.58 1.36c.1.75.29 1.48.55 2.19a1.58 1.58 0 0 1-.36 1.67L5.49 7.25a12.63 12.63 0 0 0 4.73 4.73l1.03-1.03a1.58 1.58 0 0 1 1.67-.36c.71.26 1.44.44 2.19.55A1.58 1.58 0 0 1 16.5 12.7Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>

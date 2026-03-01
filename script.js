@@ -318,6 +318,7 @@
         visible = shouldShow;
         cta.classList.toggle('visible', visible);
         cta.setAttribute('aria-hidden', String(!visible));
+        cta.querySelector('a').setAttribute('tabindex', visible ? '0' : '-1');
       }
       ticking = false;
     }
