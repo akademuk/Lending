@@ -55,8 +55,15 @@
 
     overlay.addEventListener('click', closeMenu);
 
-    mobileNavEl.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', closeMenu);
+    mobileNavEl.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        closeMenu();
+        if (target) {
+          setTimeout(() => smoothScrollTo(target, 800), 350);
+        }
+      });
     });
 
     document.addEventListener('keydown', (e) => {
@@ -80,13 +87,38 @@
   }
 
   /* ── SMOOTH SCROLL ── */
+  const HEADER_H = 80;
+
+  function smoothScrollTo(targetEl, duration) {
+    if (!targetEl) return;
+    duration = duration || 900;
+    const start = window.scrollY;
+    const end = targetEl.getBoundingClientRect().top + start - HEADER_H;
+    const diff = end - start;
+    let startTime = null;
+
+    function ease(t) {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      window.scrollTo(0, start + diff * ease(progress));
+      if (progress < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  }
+
   function initSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', (e) => {
-        const target = document.querySelector(anchor.getAttribute('href'));
+        const id = anchor.getAttribute('href');
+        const target = document.querySelector(id);
         if (target) {
           e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          smoothScrollTo(target);
         }
       });
     });
@@ -294,9 +326,11 @@
       if (!ticking) { requestAnimationFrame(update); ticking = true; }
     }, { passive: true });
 
-    cta.querySelector('a').addEventListener('click', () => {
+    cta.querySelector('a').addEventListener('click', (e) => {
+      e.preventDefault();
       cta.classList.remove('visible');
       visible = false;
+      smoothScrollTo(contactSection, 800);
     });
 
     update();

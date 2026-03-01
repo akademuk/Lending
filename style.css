@@ -125,7 +125,7 @@
 
 /* ── RESET & BASE ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:90px}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:90px}
 body{
   font-family:var(--f-family);
   font-size:var(--f-base);
