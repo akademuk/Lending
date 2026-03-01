@@ -13,6 +13,8 @@ header('X-Frame-Options: DENY');
 $allowed_origins = [
     'https://brewmist.com.ua',
     'https://www.brewmist.com.ua',
+    'https://lp.timekairos.com.ua',
+    'https://www.lp.timekairos.com.ua',
     'http://localhost',
     'http://127.0.0.1'
 ];
@@ -20,7 +22,7 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowed_origins, true)) {
     header("Access-Control-Allow-Origin: {$origin}");
 } else {
-    header('Access-Control-Allow-Origin: https://brewmist.com.ua');
+    header('Access-Control-Allow-Origin: https://lp.timekairos.com.ua');
 }
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -39,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 /* ── CONFIG ── */
 $TG_BOT_TOKEN  = '8551171117:AAFEx-KT6aJQOtkPB-td-9t4LcoiJqS7IBo';
 $TG_CHAT_ID    = '2110512187';
-$EMAIL_TO      = 'akademuk24@gmail.com';
-$EMAIL_FROM    = 'noreply@brewmist.com.ua';
+$EMAIL_TO      = 'akademuk24@gmail.com, golofaev73@gmail.com';
+$EMAIL_FROM    = 'admin@timekairos.com.ua';
 
 /* ── RATE LIMITING (file-based, per IP) ── */
 $rate_dir = sys_get_temp_dir() . '/bm_rate/';
@@ -131,6 +133,7 @@ if (!empty($input['website'])) {
 }
 
 $results = ['tg' => false, 'email' => false];
+$errors = [];
 
 /* ── TELEGRAM ── */
 $tgText = "☕ *Нова заявка з Brewmist*\n\n"
@@ -155,8 +158,12 @@ curl_setopt_array($ch, [
 ]);
 $tgResp = curl_exec($ch);
 $tgCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$tgErr  = curl_error($ch);
 curl_close($ch);
 $results['tg'] = ($tgCode === 200);
+if (!$results['tg']) {
+    $errors['tg'] = $tgErr ?: ('Telegram HTTP ' . $tgCode);
+}
 
 /* ── EMAIL ── */
 $eName    = escHtml($name);
@@ -165,7 +172,8 @@ $eCompany = escHtml($company ?: '—');
 $eVolume  = escHtml($volume ?: '—');
 $eRef     = escHtml($referer ?: '—');
 
-$subject = "Нова заявка Brewmist — " . mb_substr($name, 0, 50, 'UTF-8');
+$rawSubject = "Нова заявка Brewmist — " . mb_substr($name, 0, 50, 'UTF-8');
+$subject = '=?UTF-8?B?' . base64_encode($rawSubject) . '?=';
 
 $body = <<<HTML
 <html>
@@ -187,8 +195,18 @@ $headers  = "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 $headers .= "From: Brewmist <{$EMAIL_FROM}>\r\n";
 $headers .= "Reply-To: {$EMAIL_FROM}\r\n";
+$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
 
-$results['email'] = mail($EMAIL_TO, $subject, $body, $headers);
+$mailErrorBefore = error_get_last();
+$results['email'] = @mail($EMAIL_TO, $subject, $body, $headers, "-f{$EMAIL_FROM}");
+$mailErrorAfter = error_get_last();
+if (!$results['email']) {
+    if ($mailErrorAfter && $mailErrorAfter !== $mailErrorBefore) {
+        $errors['email'] = $mailErrorAfter['message'] ?? 'mail() failed';
+    } else {
+        $errors['email'] = 'mail() returned false (check hosting mail config/SPF-DKIM/DMARC)';
+    }
+}
 
 /* ── RESPONSE ── */
 $ok = $results['tg'] || $results['email'];
@@ -203,4 +221,4 @@ if (!$isAjax) {
 }
 
 http_response_code($ok ? 200 : 500);
-echo json_encode(['ok' => $ok, 'results' => $results]);
+echo json_encode(['ok' => $ok, 'results' => $results, 'errors' => (object)$errors]);
