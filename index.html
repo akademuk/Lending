@@ -22,8 +22,8 @@
   <meta property="og:image:height" content="630">
   <link rel="canonical" href="https://brewmist.com.ua/">
   <title>Brewmist — Професійні кавомашини в оренду для бізнесу</title>
-  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="img/logo-white.png">
+  <link rel="apple-touch-icon" href="img/logo-white.png">
   <link rel="preload" href="fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="style.css" as="style">
@@ -386,7 +386,7 @@
   <header class="header" id="header">
     <div class="header__container container">
       <a href="#hero" class="header__logo" aria-label="Brewmist — на головну">
-        <span class="header__logo-icon">☕</span>BREWMIST
+        <img src="img/logo-white.svg" alt="Brewmist — на головну" width="64" height="64">
       </a>
       <nav class="header__nav" aria-label="Основна навігація">
         <ul class="header__nav-list">
@@ -424,7 +424,7 @@
         <div class="hero__content">
           <div class="hero__badge">
             <span class="hero__badge-dot"></span>
-            Вже обслуговуємо 200+ офісів по Україні
+            Вже обслуговуємо 200+ локацій по Україні
           </div>
           <h1 class="hero__title">
             Професійні<br>кавомашини<br>в оренду<br><span class="hero__title-accent">для бізнесу</span>
@@ -525,9 +525,9 @@
             <div class="pkg-card__glow" aria-hidden="true"></div>
             <div class="pkg-card__img">
               <picture>
-                <source srcset="img/pkg-jl22.avif" type="image/avif">
-                <source srcset="img/pkg-jl22.webp" type="image/webp">
-                <img src="img/pkg-jl22.jpg" alt="Кавомашина Jetinno JL22" loading="lazy" decoding="async" width="400"
+                <source srcset="img/jetinno.avif" type="image/avif">
+                <source srcset="img/jetinno.webp" type="image/webp">
+                <img src="img/jetinno.jpg" alt="Кавомашина Jetinno JL22" loading="lazy" decoding="async" width="400"
                   height="300">
               </picture>
               <span class="pkg-card__badge-tag">Суперавтомат</span>
@@ -581,9 +581,9 @@
             <div class="pkg-card__ribbon">Хіт продажів</div>
             <div class="pkg-card__img pkg-card__img--alt">
               <picture>
-                <source srcset="img/pkg-f11-300.avif 300w, img/pkg-f11.avif 600w" sizes="(max-width:639px) 100vw, 42vw" type="image/avif">
-                <source srcset="img/pkg-f11-300.webp 300w, img/pkg-f11.webp 600w" sizes="(max-width:639px) 100vw, 42vw" type="image/webp">
-                <img src="img/pkg-f11.jpg" alt="Кавомашина Dr.Coffee F11" loading="lazy" decoding="async" width="400"
+                    <source srcset="img/Drcoffeef11.avif" type="image/avif">
+                    <source srcset="img/Drcoffeef11.webp" type="image/webp">
+                <img src="img/Drcoffeef11.jpg" alt="Кавомашина Dr.Coffee F11" loading="lazy" decoding="async" width="400"
                   height="300">
               </picture>
               <span class="pkg-card__badge-tag">Бізнес</span>
@@ -633,9 +633,9 @@
             <div class="pkg-card__glow" aria-hidden="true"></div>
             <div class="pkg-card__img pkg-card__img--third">
               <picture>
-                <source srcset="img/pkg-saeco.avif" type="image/avif">
-                <source srcset="img/pkg-saeco.webp" type="image/webp">
-                <img src="img/pkg-saeco.jpg" alt="Кавомашина Saeco IperAutomatica" loading="lazy" decoding="async"
+                <source srcset="img/Saeco.avif" type="image/avif">
+                <source srcset="img/Saeco.webp" type="image/webp">
+                <img src="img/Saeco.jpg" alt="Кавомашина Saeco IperAutomatica" loading="lazy" decoding="async"
                   width="400" height="300">
               </picture>
               <span class="pkg-card__badge-tag">Вендинг</span>
@@ -749,18 +749,6 @@
             </div>
             <h3 class="prod-card__name">Айріш</h3>
             <p class="prod-card__desc">Розчинний напій з ароматом ірландського крему.</p>
-          </article>
-          <article class="prod-card reveal-item">
-            <div class="prod-card__img prod-card__img--v7">
-              <picture>
-                <source srcset="img/prod-tea.avif" type="image/avif">
-                <source srcset="img/prod-tea.webp" type="image/webp">
-                <img src="img/prod-tea.jpg" alt="Порошковий чай" loading="lazy" decoding="async" width="300"
-                  height="300">
-              </picture>
-            </div>
-            <h3 class="prod-card__name">Порошковий чай</h3>
-            <p class="prod-card__desc">Швидке приготування, освіжаючий смак.</p>
           </article>
         </div>
       </div>
@@ -942,7 +930,9 @@
     <div class="footer__container container">
       <div class="footer__grid">
         <div class="footer__brand">
-          <a href="#hero" class="footer__logo">☕ BREWMIST</a>
+          <a href="#hero" class="footer__logo">
+              <img src="img/logo-white.svg" alt="Brewmist — на головну" width="64" height="64">
+          </a>
           <p class="footer__tagline">Професійна кава для вашого бізнесу</p>
           <div class="footer__socials">
             <a href="https://facebook.com/ВАША_СТОРІНКА" class="footer__social" aria-label="Facebook" target="_blank"
