@@ -1,7 +1,8 @@
 <?php
 /**
- * Brewmist — Form Handler (Hardened)
- * Sends lead to Telegram + Email
+ * Brewmist — Form Handler
+ * TODO: CRM integration (awaiting API from client)
+ * Telegram + Email sending disabled per client request
  */
 
 /* ── SECURITY HEADERS ── */
@@ -39,10 +40,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 /* ── CONFIG ── */
-$TG_BOT_TOKEN  = '8551171117:AAFEx-KT6aJQOtkPB-td-9t4LcoiJqS7IBo';
-$TG_CHAT_ID    = '2110512187';
-$EMAIL_TO      = 'akademuk24@gmail.com, golofaev73@gmail.com';
-$EMAIL_FROM    = 'admin@timekairos.com.ua';
+// CRM API endpoint — awaiting credentials from client
+// $CRM_API_URL = '';
+// $CRM_API_KEY = '';
+
+// Telegram + Email disabled per client request
+// $TG_BOT_TOKEN  = '8551171117:AAFEx-KT6aJQOtkPB-td-9t4LcoiJqS7IBo';
+// $TG_CHAT_ID    = '2110512187';
+// $EMAIL_TO      = 'orendabrewmist@gmail.com';
+// $EMAIL_FROM    = 'admin@timekairos.com.ua';
 
 /* ── RATE LIMITING (file-based, per IP) ── */
 $rate_dir = sys_get_temp_dir() . '/bm_rate/';
@@ -132,84 +138,36 @@ if (!empty($input['website'])) {
     exit;
 }
 
-$results = ['tg' => false, 'email' => false];
+$results = ['crm' => false];
 $errors = [];
 
-/* ── TELEGRAM ── */
-$tgText = "☕ *Нова заявка з Brewmist*\n\n"
-    . "👤 *Ім'я:* " . escTg($name) . "\n"
-    . "📞 *Телефон:* " . escTg($phone) . "\n"
-    . ($company ? "🏢 *Компанія:* " . escTg($company) . "\n" : '')
-    . "📊 *Обсяг:* " . escTg($volume ?: '—') . "\n\n"
-    . "🕐 _{$ts}_";
+/* ── CRM INTEGRATION (TODO: awaiting API) ── */
+// When CRM API is provided, send lead data here:
+// $crmPayload = [
+//     'name'    => $name,
+//     'phone'   => $phone,
+//     'company' => $company,
+//     'volume'  => $volume,
+//     'source'  => $referer,
+//     'ts'      => $ts,
+// ];
 
-$ch = curl_init("https://api.telegram.org/bot{$TG_BOT_TOKEN}/sendMessage");
-curl_setopt_array($ch, [
-    CURLOPT_POST           => true,
-    CURLOPT_POSTFIELDS     => json_encode([
-        'chat_id'    => $TG_CHAT_ID,
-        'text'       => $tgText,
-        'parse_mode' => 'Markdown'
-    ]),
-    CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_TIMEOUT        => 10,
-    CURLOPT_SSL_VERIFYPEER => true,
-]);
-$tgResp = curl_exec($ch);
-$tgCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$tgErr  = curl_error($ch);
-curl_close($ch);
-$results['tg'] = ($tgCode === 200);
-if (!$results['tg']) {
-    $errors['tg'] = $tgErr ?: ('Telegram HTTP ' . $tgCode);
-}
-
-/* ── EMAIL ── */
-$eName    = escHtml($name);
-$ePhone   = escHtml($phone);
-$eCompany = escHtml($company ?: '—');
-$eVolume  = escHtml($volume ?: '—');
-$eRef     = escHtml($referer ?: '—');
-
-$rawSubject = "Нова заявка Brewmist — " . mb_substr($name, 0, 50, 'UTF-8');
-$subject = '=?UTF-8?B?' . base64_encode($rawSubject) . '?=';
-
-$body = <<<HTML
-<html>
-<body style="font-family:Arial,sans-serif;color:#333;max-width:600px;margin:0 auto;">
-<h2 style="color:#493632;">Нова заявка з сайту Brewmist</h2>
-<table style="border-collapse:collapse;width:100%;">
-  <tr><td style="padding:8px 12px;border-bottom:1px solid #eee;font-weight:bold;">Ім'я</td><td style="padding:8px 12px;border-bottom:1px solid #eee;">{$eName}</td></tr>
-  <tr><td style="padding:8px 12px;border-bottom:1px solid #eee;font-weight:bold;">Телефон</td><td style="padding:8px 12px;border-bottom:1px solid #eee;"><a href="tel:{$ePhone}">{$ePhone}</a></td></tr>
-  <tr><td style="padding:8px 12px;border-bottom:1px solid #eee;font-weight:bold;">Компанія</td><td style="padding:8px 12px;border-bottom:1px solid #eee;">{$eCompany}</td></tr>
-  <tr><td style="padding:8px 12px;border-bottom:1px solid #eee;font-weight:bold;">Обсяг напоїв/день</td><td style="padding:8px 12px;border-bottom:1px solid #eee;">{$eVolume}</td></tr>
-  <tr><td style="padding:8px 12px;font-weight:bold;">Час</td><td style="padding:8px 12px;">{$ts}</td></tr>
-</table>
-<p style="margin-top:16px;font-size:12px;color:#999;">Джерело: {$eRef}</p>
-</body>
-</html>
-HTML;
-
-$headers  = "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-$headers .= "From: Brewmist <{$EMAIL_FROM}>\r\n";
-$headers .= "Reply-To: {$EMAIL_FROM}\r\n";
-$headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
-
-$mailErrorBefore = error_get_last();
-$results['email'] = @mail($EMAIL_TO, $subject, $body, $headers, "-f{$EMAIL_FROM}");
-$mailErrorAfter = error_get_last();
-if (!$results['email']) {
-    if ($mailErrorAfter && $mailErrorAfter !== $mailErrorBefore) {
-        $errors['email'] = $mailErrorAfter['message'] ?? 'mail() failed';
-    } else {
-        $errors['email'] = 'mail() returned false (check hosting mail config/SPF-DKIM/DMARC)';
-    }
-}
+// For now, log lead to file as backup
+$logDir = __DIR__ . '/leads/';
+if (!is_dir($logDir)) @mkdir($logDir, 0700, true);
+$logEntry = json_encode([
+    'name'    => $name,
+    'phone'   => $phone,
+    'company' => $company,
+    'volume'  => $volume,
+    'source'  => $referer,
+    'ts'      => $ts,
+], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . ",\n";
+@file_put_contents($logDir . 'leads.json', $logEntry, FILE_APPEND | LOCK_EX);
+$results['crm'] = true; // treat as success until CRM is connected
 
 /* ── RESPONSE ── */
-$ok = $results['tg'] || $results['email'];
+$ok = $results['crm'];
 
 // If native form POST (no JS), redirect to thanks page
 $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH'])
