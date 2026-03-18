@@ -1,8 +1,9 @@
 <?php
 /**
  * Brewmist — Form Handler
- * TODO: CRM integration (awaiting API from client)
- * Telegram + Email sending disabled per client request
+ * KeyCRM integration active (pipelines/cards)
+ * Telegram + Email disabled per client request
+ * File backup: leads/leads.json (always)
  */
 
 /* ── SECURITY HEADERS ── */
@@ -40,9 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 /* ── CONFIG ── */
-// CRM API endpoint — awaiting credentials from client
-// $CRM_API_URL = '';
-// $CRM_API_KEY = '';
+$KEYCRM_API_URL = 'https://openapi.keycrm.app/v1';
+$KEYCRM_API_KEY = 'Yzk3ZGMzYjY0OWFlMzNmMGRmYzk1ZmFmMDZkMjUyNTA2ODFiOTdhYw';
+$KEYCRM_PIPELINE_ID = 10; // Воронка «Оренда кавомашин»
+$KEYCRM_SOURCE_ID   = 21; // Джерело «brewmist_landing»
 
 // Telegram + Email disabled per client request
 // $TG_BOT_TOKEN  = '8551171117:AAFEx-KT6aJQOtkPB-td-9t4LcoiJqS7IBo';
@@ -141,30 +143,65 @@ if (!empty($input['website'])) {
 $results = ['crm' => false];
 $errors = [];
 
-/* ── CRM INTEGRATION (TODO: awaiting API) ── */
-// When CRM API is provided, send lead data here:
-// $crmPayload = [
-//     'name'    => $name,
-//     'phone'   => $phone,
-//     'company' => $company,
-//     'volume'  => $volume,
-//     'source'  => $referer,
-//     'ts'      => $ts,
-// ];
+/* ── KEYCRM INTEGRATION ── */
+$crmPayload = [
+    'title'       => "Заявка: {$name}",
+    'source_id'   => $KEYCRM_SOURCE_ID,
+    'pipeline_id' => $KEYCRM_PIPELINE_ID,
+    'contact'     => [
+        'name'  => $name,
+        'phone' => $phone,
+    ],
+    'utm_source'  => 'landing',
+    'note'        => "Компанія: {$company}\nОб'єм напоїв/день: {$volume}\nДжерело: {$referer}\nЧас: {$ts}",
+];
 
-// For now, log lead to file as backup
+if ($company !== '') {
+    $crmPayload['contact']['company'] = $company;
+}
+
+$ch = curl_init("{$KEYCRM_API_URL}/pipelines/cards");
+curl_setopt_array($ch, [
+    CURLOPT_POST           => true,
+    CURLOPT_POSTFIELDS     => json_encode($crmPayload),
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_TIMEOUT        => 10,
+    CURLOPT_HTTPHEADER     => [
+        'Content-Type: application/json',
+        'Accept: application/json',
+        "Authorization: Bearer {$KEYCRM_API_KEY}",
+    ],
+]);
+$crmResponse = curl_exec($ch);
+$crmHttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$crmError    = curl_error($ch);
+curl_close($ch);
+
+if ($crmHttpCode >= 200 && $crmHttpCode < 300) {
+    $results['crm'] = true;
+} else {
+    $errors['crm'] = "KeyCRM HTTP {$crmHttpCode}: " . ($crmError ?: $crmResponse);
+}
+
+/* ── BACKUP: log lead to file (always) ── */
 $logDir = __DIR__ . '/leads/';
 if (!is_dir($logDir)) @mkdir($logDir, 0700, true);
 $logEntry = json_encode([
-    'name'    => $name,
-    'phone'   => $phone,
-    'company' => $company,
-    'volume'  => $volume,
-    'source'  => $referer,
-    'ts'      => $ts,
+    'name'      => $name,
+    'phone'     => $phone,
+    'company'   => $company,
+    'volume'    => $volume,
+    'source'    => $referer,
+    'ts'        => $ts,
+    'crm_ok'    => $results['crm'],
+    'crm_code'  => $crmHttpCode,
 ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . ",\n";
 @file_put_contents($logDir . 'leads.json', $logEntry, FILE_APPEND | LOCK_EX);
-$results['crm'] = true; // treat as success until CRM is connected
+
+// If CRM failed, still treat as success for user (lead is saved to file)
+if (!$results['crm']) {
+    $results['crm'] = true;
+}
 
 /* ── RESPONSE ── */
 $ok = $results['crm'];
